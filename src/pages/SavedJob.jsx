@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Header from '../Header/Header';
 
 const SavedJobs = () => {
   const [savedJobs, setSavedJobs] = useState([]);
@@ -10,6 +11,8 @@ const SavedJobs = () => {
   }, []);
 
   return (
+    <>
+    <Header/>
     <div className="p-8 bg-gray-100 min-h-screen">
       <h1 className="text-3xl font-bold mb-6">Saved Jobs</h1>
       <div className="mb-4">
@@ -48,6 +51,7 @@ const SavedJobs = () => {
         </table>
       )}
     </div>
+    </>
   );
 };
 

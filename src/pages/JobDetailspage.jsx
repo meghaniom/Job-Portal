@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import Header from '../Header/Header';
 
 const JobDetails = () => {
   const { id } = useParams();
@@ -27,6 +28,8 @@ const JobDetails = () => {
   if (!job) return <p className="p-6 text-red-500">Job not found.</p>;
 
   return (
+    <>
+<Header/>
     <div className="p-8 bg-gray-100 min-h-screen">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
         <h1 className="text-3xl font-bold text-gray-800 mb-2">{job.title}</h1>
@@ -45,6 +48,7 @@ const JobDetails = () => {
         </div>
       </div>
     </div>
+        </>
   );
 };
 
