@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Header from "../Header/Header";
 
 const JobListings = () => {
   const [jobs, setJobs] = useState([]);
@@ -95,8 +94,6 @@ const filteredJobs = jobs.filter((job) => {
   };
 
   return (
-    <>
-    <Header/>
     <div className="min-h-screen bg-gray-100 p-8">
       <h2 className="text-3xl font-bold text-gray-800 mb-6">
         Remote Software Development Jobs
@@ -150,7 +147,7 @@ const filteredJobs = jobs.filter((job) => {
           <option value="Europe">Europe</option>
           <option value="Canada">Canada</option>
           <option value="India">India</option>
-          <option value="Hungary">Hungary</option>
+          <option value="Hungary"></option>
           <option value="Netherlands">Netherlands</option>
           <option value="Argentina">Argentina</option>
           {/* <option */}
@@ -203,7 +200,7 @@ const filteredJobs = jobs.filter((job) => {
                         <td className="py-4 px-6 space-y-2 flex flex-col sm:flex-row sm:space-x-3">
                           <Link
                             to={`/jobs/${job.id}`}
-                            className="  text-blue-600 hover:underline flex items-center"
+                            className="  w-5  text-blue-600 hover:underline flex items-center"
                           >
                             Apply Now
                           </Link>
@@ -263,7 +260,6 @@ const filteredJobs = jobs.filter((job) => {
         </>
       )}
     </div>
-    </>
   );
 };
 

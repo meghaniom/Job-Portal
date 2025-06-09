@@ -61,7 +61,7 @@ const FirstPage = () => {
             Browse Jobs
           </Link>
           <Link
-            to="/register"
+            to="/jobs"
             className="px-8 py-3.5 border-2 border-blue-600 text-blue-600 font-medium rounded-full hover:bg-blue-50 transition-all duration-300"
           >
             Create Account

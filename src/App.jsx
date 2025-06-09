@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 
 import JobListings from './pages/Joblist';
-
+import Header from './Header/Header';
 import FirstPage from './component/HomePage';
 import JobDetailspage from './pages/JobDetailspage';
 import SavedJob from './pages/SavedJob';
@@ -18,8 +18,7 @@ const AppLayout = () => {
 
   return (
     <>
-      {!isLoginPage && isLoggedIn  }
-
+      {isLoginPage &&  !isLoggedIn && <Header />}
 
       <Routes>
         <Route path="/" element={<Login />} />

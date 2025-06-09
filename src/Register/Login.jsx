@@ -28,6 +28,7 @@ const Login = () => {
       .catch((err) => {
         alert("Login Failed");
         console.log("Login Failed",err);
+        navigate('/NoteFound')
         
       })
       

@@ -12,7 +12,7 @@ const SavedJobs = () => {
 
   return (
     <>
-    <Header/>
+    {/* <Header/> */}
     <div className="p-8 bg-gray-100 min-h-screen">
       <h1 className="text-3xl font-bold mb-6">Saved Jobs</h1>
       <div className="mb-4">
