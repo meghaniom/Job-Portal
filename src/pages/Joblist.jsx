@@ -114,6 +114,7 @@ const JobListings = () => {
           <option value="full_time">Full-Time</option>
           <option value="part_time">Part-Time</option>
           <option value="contract">Contract</option>
+          <option value="freelance">Freelancer</option>
         </select>
       </div>
 
@@ -158,7 +159,7 @@ const JobListings = () => {
           <td className="py-4 px-6 space-y-2 flex flex-col sm:flex-row sm:space-x-3">
             <Link
               to={`/jobs/${job.id}`}
-              className="text-blue-600 hover:underline flex items-center"
+              className="  w-5  text-blue-600 hover:underline flex items-center"
             >
               Apply Now
             </Link>
