@@ -1,2 +1,2 @@
 email = "john@mail.com",
-password = "changeme"
+password = "changeme"   

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react'
+// import { BiLogoHeroku } from 'react-icons/bi';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,6 +10,12 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword]  = useState('');
      const [showPassward, setShowPassword] = useState(false);
+     const login = localStorage.getItem('token');
+     
+     if (login) {
+      console.log('dtgrdfyhtf')
+      navigate('/firstPage');
+     }
 
      const handelSubmit = () => {
         const payload = {
@@ -28,10 +35,9 @@ const Login = () => {
       .catch((err) => {
         alert("Login Failed");
         console.log("Login Failed",err);
-        navigate('/NoteFound')
+        navigate('/notefound')
         
       })
-      
      }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-100 to-blue-200">

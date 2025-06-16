@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Header from "../Header/Header";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 const JobListings = () => {
   const [jobs, setJobs] = useState([]);
@@ -9,11 +11,9 @@ const JobListings = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [jobTypeFilter, setJobTypeFilter] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [locationTypeFilter, setLocationTypeFilter] = useState("");
 
-  const [locationTypeFilter, SetLocationTypeFilter] = useState("");
-
-  const jobsPerPage = 10;
+  const [visibleCount, setVisibleCount] = useState(10);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,6 +29,7 @@ const JobListings = () => {
         setLoading(false);
       }
     };
+
     try {
       const saved = JSON.parse(localStorage.getItem("savedJobs")) || [];
       setSavedJobs(saved);
@@ -53,213 +54,148 @@ const JobListings = () => {
     localStorage.setItem("savedJobs", JSON.stringify(updated));
   };
 
-  // Filter jobs based on search and dropdown
-const filteredJobs = jobs.filter((job) => {
-  const searchMatch =
-    job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    job.company_name.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredJobs = jobs.filter((job) => {
+    const searchMatch =
+      job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      job.company_name.toLowerCase().includes(searchTerm.toLowerCase());
 
-  const typeMatch = jobTypeFilter
-    ? job.job_type.toLowerCase() === jobTypeFilter.toLowerCase()
-    : true;
-    
-     const typeLocation = locationTypeFilter
-     ?job.candidate_required_location.toLowerCase() === locationTypeFilter.toLowerCase()
-     : true;
+    const typeMatch = jobTypeFilter
+      ? job.job_type.toLowerCase() === jobTypeFilter.toLowerCase()
+      : true;
 
-  
-  console.log({
-    jobTitle: job.title,
-    jobType: job.job_type,
-    location: job.candidate_required_location,
- 
+    const locationMatch = locationTypeFilter
+      ? job.candidate_required_location.toLowerCase() ===
+        locationTypeFilter.toLowerCase()
+      : true;
+
+    return searchMatch && typeMatch && locationMatch;
   });
 
-  return searchMatch && typeMatch && typeLocation ;
-});
+  useEffect(() => {
+    const handleScroll = () => {
+      const bottom =
+        window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+      if (bottom && visibleCount < filteredJobs.length) {
+        setVisibleCount((prev) => prev + 10);
+      }
+    };
 
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [filteredJobs.length, visibleCount]);
 
-  // Pagination logic
-  const totalPages = Math.ceil(filteredJobs.length / jobsPerPage);
-  const indexOfLastJob = currentPage * jobsPerPage;
-  const indexOfFirstJob = indexOfLastJob - jobsPerPage;
-  const currentJobs = filteredJobs.slice(indexOfFirstJob, indexOfLastJob);
-
-  const handlePrev = () => {
-    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
-  };
-
-  const handleNext = () => {
-    if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
-  };
+  const displayedJobs = filteredJobs.slice(0, visibleCount);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6">
-        Remote Software Development Jobs
-      </h2>
+    <>
+      <Header />
+      <div className="min-h-screen bg-gray-100 p-8">
+        <h2 className="text-3xl font-bold text-gray-800 mb-6">
+          Remote Software Development Jobs
+        </h2>
 
-      <h1 className="text-3xl font-bold mb-6">Job Listings</h1>
-      <div className="mb-4">
-        <Link to="/saved" className="text-blue-600 underline">
-          View Saved Jobs →
-        </Link>
-      </div>
+        <div className="mb-4">
+          <Link to="/saved" className="text-blue-600 underline">
+            View Saved Jobs →
+          </Link>
+        </div>
 
-      {/* Search and filter */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 mb-6">
-        <input
-          type="text"
-          placeholder="Search by title or company..."
-          className="p-2 border border-gray-300 rounded w-full sm:w-1/2"
-          value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            setCurrentPage(1);
-          }}
-        />
+        {/* Search and Filter */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 mb-6">
+          <input
+            type="text"
+            placeholder="Search by title or company..."
+            className="p-2 border border-gray-300 rounded w-full sm:w-1/2"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
 
-        <select
-          className="p-2 border border-gray-300 rounded mt-2 sm:mt-0"
-          value={jobTypeFilter}
-          onChange={(e) => {
-            setJobTypeFilter(e.target.value);
-            setCurrentPage(1);
-          }}
-        >
-          <option value="">All Job Types</option>
-          <option value="full_time">Full-Time</option>
-          <option value="part_time">Part-Time</option>
-          <option value="contract">Contract</option>
-          <option value="freelance">Freelancer</option>
-        </select>
+          <select
+            className="p-2 border border-gray-300 rounded mt-2 sm:mt-0"
+            value={jobTypeFilter}
+            onChange={(e) => setJobTypeFilter(e.target.value)}
+          >
+            <option value="">All Job Types</option>
+            <option value="full_time">Full-Time</option>
+            <option value="part_time">Part-Time</option>
+            <option value="contract">Contract</option>
+            <option value="freelance">Freelancer</option>
+          </select>
 
-        <select
-          className="p-2 border border-gray-300 rounded mt-2 sm:mt-0"
-          value={locationTypeFilter}
-          onChange={(e) => {
-           SetLocationTypeFilter(e.target.value);
-            setCurrentPage(1);
-          }}
-        >
-          <option value="">All Job Location</option>
-          <option value="USA">USA</option>
-          <option value="Europe">Europe</option>
-          <option value="Canada">Canada</option>
-          <option value="India">India</option>
-          <option value="Hungary"></option>
-          <option value="Netherlands">Netherlands</option>
-          <option value="Argentina">Argentina</option>
-          {/* <option */}
-        </select>
-      </div>
+          <select
+            className="p-2 border border-gray-300 rounded mt-2 sm:mt-0"
+            value={locationTypeFilter}
+            onChange={(e) => setLocationTypeFilter(e.target.value)}
+          >
+            <option value="">All Job Location</option>
+            <option value="USA">USA</option>
+            <option value="Europe">Europe</option>
+            <option value="Canada">Canada</option>
+            <option value="India">India</option>
+            <option value="Hungary">Hungary</option>
+            <option value="Netherlands">Netherlands</option>
+            <option value="Argentina">Argentina</option>
+          </select>
+        </div>
 
-      {/* Job Table */}
-      {error ? (
-        <p className="text-red-500">
-          The remote jobs are not available right now.
-        </p>
-      ) : loading ? (
-        <p className="text-gray-600">Loading jobs...</p>
-      ) : (
-        <>
-          {filteredJobs.length === 0 ? (
-            <p className="text-gray-600">No jobs found.</p>
-          ) : (
-            <>
-              <div className="overflow-x-auto rounded-lg shadow-md">
-                <table className="min-w-full bg-white border border-gray-200">
-                  <thead className="bg-blue-600 text-white">
-                    <tr>
-                      <th className="py-3 px-6 text-left">Job Title</th>
-                      <th className="py-3 px-6 text-left">Company</th>
-                      <th className="py-3 px-6 text-left">Location</th>
-                      <th className="py-3 px-6 text-left">Type</th>
-                      <th className="py-3 px-6 text-left">Actions</th>
-                      <th className="py-3 px-6 text-left">SaveJob</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {currentJobs.map((job, index) => (
-                      <tr
-                        key={job.id}
-                        className={index % 2 === 0 ? "bg-gray-50" : "bg-white"}
-                      >
-                        <td className="py-4 px-6 font-medium text-gray-800">
+        {/* Jobs Table */}
+        {error ? (
+          <p className="text-red-500">
+            The remote jobs are not available right now.
+          </p>
+        ) : loading ? (
+          <p className="text-gray-600">Loading jobs...</p>
+        ) : filteredJobs.length === 0 ? (
+          <p className="text-gray-600">No jobs found.</p>
+        )    : (
+          <div className="overflow-x-auto rounded-lg shadow-md">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {displayedJobs.map((job) => {
+                const isSaved = savedJobs.find((j) => j.id === job.id);
+                return (
+                  <div
+                    key={job.id}
+                    className="bg-white border rounded-xl shadow p-5 flex flex-col justify-between hover:shadow-md transition"
+                  >
+                    <div>
+                      <div className="flex justify-between items-start mb-2">
+                        <h3 className="text-xl font-semibold text-gray-800">
                           {job.title}
-                        </td>
-                        <td className="py-4 px-6 text-gray-700">
-                          {job.company_name}
-                        </td>
-                        <td className="py-4 px-6 text-gray-700">
-                          {job.candidate_required_location}
-                        </td>
-                        <td className="py-4 px-6 text-gray-700">
-                          {job.job_type}
-                        </td>
-                        <td className="py-4 px-6 space-y-2 flex flex-col sm:flex-row sm:space-x-3">
-                          <Link
-                            to={`/jobs/${job.id}`}
-                            className="  w-5  text-blue-600 hover:underline flex items-center"
-                          >
-                            Apply Now
-                          </Link>
-                        </td>
-                        <td>
-                          <button
-                            onClick={() => toggleSaveJob(job)}
-                            className={`${
-                              savedJobs.find((j) => j.id === job.id)
-                                ? "bg-red-500 hover:bg-red-600"
-                                : "bg-green-500 hover:bg-green-600"
-                            } text-white px-4 py-2 rounded`}
-                          >
-                            {savedJobs.find((j) => j.id === job.id)
-                              ? "Unsave"
-                              : "Save"}
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                        </h3>
+                        <button onClick={() => toggleSaveJob(job)}>
+                          {isSaved ? (
+                            <FaHeart className="text-red-500 text-xl" />
+                          ) : (
+                            <FaRegHeart className="text-gray-400 text-xl hover:text-red-500" />
+                          )}
+                        </button>
+                      </div>
 
-              {/* ✅ Custom Pagination UI */}
-              <div className="flex justify-center mt-6 space-x-4 items-center">
-                <button
-                  onClick={handlePrev}
-                  disabled={currentPage === 1}
-                  className={`px-4 py-2 rounded border ${
-                    currentPage === 1
-                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      : "bg-white text-gray-700 hover:bg-gray-100 border-gray-400"
-                  }`}
-                >
-                  Prev
-                </button>
+                      <p className="text-gray-700 font-medium">
+                        {job.company_name}
+                      </p>
+                      <p className="text-sm text-gray-600 mt-1">
+                        📍 {job.candidate_required_location}
+                      </p>
+                      <p className="text-sm text-blue-600 mt-1 font-medium">
+                        🛠 {job.job_type}
+                      </p>
+                    </div>
 
-                <span className="px-4 py-2 font-semibold bg-gray-200 rounded text-gray-800">
-                  Page {currentPage} of {totalPages}
-                </span>
-
-                <button
-                  onClick={handleNext}
-                  disabled={currentPage === totalPages}
-                  className={`px-4 py-2 rounded border ${
-                    currentPage === totalPages
-                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      : "bg-white text-gray-700 hover:bg-gray-100 border-gray-400"
-                  }`}
-                >
-                  Next
-                </button>
-              </div>
-            </>
-          )}
-        </>
-      )}
-    </div>
+                    <Link
+                      to={`/jobs/${job.id}`}
+                      className="mt-4 inline-block text-center bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition"
+                    >
+                      Apply Now
+                    </Link>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 
