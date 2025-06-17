@@ -33,15 +33,28 @@ const SavedJobs = () => {
                   <h3 className="text-xl font-semibold text-gray-800">
                     {job.title}
                   </h3>
-                  <p className="text-gray-700 font-medium mt-1">
-                    {job.company_name}
-                  </p>
-                  <p className="text-sm text-gray-600 mt-1">
-                    📍 {job.candidate_required_location}
-                  </p>
-                  <p className="text-sm text-blue-600 mt-1 font-medium">
-                    🛠 {job.job_type}
-                  </p>
+                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2 mt-2">
+                    <div className="flex flex-col">
+                      <p className="text-gray-700 font-medium">
+                        {job.company_name}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        📍 {job.candidate_required_location}
+                      </p>
+                      <p className="text-sm text-blue-600 font-medium">
+                        🛠 {job.job_type}
+                      </p>
+                    </div>
+
+                    <div className="mt-2 lg:mt-0">
+                      <Link
+                        to={`/jobs/details/${job.id}`}
+                        className="text-blue-600 underline font-medium"
+                      >
+                        Apply Job
+                      </Link>
+                    </div>
+                  </div>
                 </div>
 
                 <Link

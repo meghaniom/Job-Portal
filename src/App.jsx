@@ -2,7 +2,6 @@ import React from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 
 import JobListings from "./pages/Joblist";
-import Header from "./Header/Header";
 import FirstPage from "./component/HomePage";
 import JobDetailspage from "./pages/JobDetailspage";
 import SavedJob from "./pages/SavedJob";
@@ -12,6 +11,7 @@ import "./App.css";
 import { AuthProvider } from "./context/Authcontext";
 import ProjectedRouter from "./Register/ProjectedRouter";
 import JobApply from "./pages/JobApply";
+import Applyjob from "./pages/Applyjob";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -68,11 +68,11 @@ const AppLayout = () => {
         />
 
         <Route
-          path="/jobs/:id/details"
+          path="/jobs/details/:id"
           element={
             isLoggedIn ? (
               <ProjectedRouter>
-               <JobApply/>
+                <JobApply />
               </ProjectedRouter>
             ) : (
               <Navigate to="/notefound" />
@@ -86,6 +86,18 @@ const AppLayout = () => {
             isLoggedIn ? (
               <ProjectedRouter>
                 <SavedJob />
+              </ProjectedRouter>
+            ) : (
+              <Navigate to="/notefound" />
+            )
+          }
+        />
+        <Route
+          path="/apply/:id"
+          element={
+            isLoggedIn ? (
+              <ProjectedRouter>
+                <Applyjob />
               </ProjectedRouter>
             ) : (
               <Navigate to="/notefound" />

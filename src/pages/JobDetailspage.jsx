@@ -59,7 +59,7 @@ const JobDetails = () => {
               </Link>
             </div>
             <div className="mt-6 w-full text-right">
-              <Link to={`/jobs/${job.id}/details`} className="text-blue-500 hover:underline">
+              <Link to="/details"className="text-blue-500 hover:underline">
                 {" "}
                 Jobs Apply ➜
               </Link>

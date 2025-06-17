@@ -93,11 +93,17 @@ const JobListings = () => {
         <h2 className="text-3xl font-bold text-gray-800 mb-6">
           Remote Software Development Jobs
         </h2>
-
-        <div className="mb-4">
-          <Link to="/saved" className="text-blue-600 underline">
-            View Saved Jobs →
-          </Link>
+        <div className="flex justify-between items-center mb-4">
+          <div className="mb-4">
+            <Link to="/saved" className="text-blue-600 underline">
+              View Saved Jobs →
+            </Link>
+          </div>
+          <div className="mb-4">
+            <Link to="/apply" className="text-blue-600 underline">
+              Apply job details →
+            </Link>
+          </div>
         </div>
 
         {/* Search and Filter */}
@@ -147,7 +153,7 @@ const JobListings = () => {
           <p className="text-gray-600">Loading jobs...</p>
         ) : filteredJobs.length === 0 ? (
           <p className="text-gray-600">No jobs found.</p>
-        )    : (
+        ) : (
           <div className="overflow-x-auto rounded-lg shadow-md">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {displayedJobs.map((job) => {
@@ -171,15 +177,28 @@ const JobListings = () => {
                         </button>
                       </div>
 
-                      <p className="text-gray-700 font-medium">
-                        {job.company_name}
-                      </p>
-                      <p className="text-sm text-gray-600 mt-1">
-                        📍 {job.candidate_required_location}
-                      </p>
-                      <p className="text-sm text-blue-600 mt-1 font-medium">
-                        🛠 {job.job_type}
-                      </p>
+                      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2 mt-2">
+                        <div className="flex flex-col">
+                          <p className="text-gray-700 font-medium">
+                            {job.company_name}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            📍 {job.candidate_required_location}
+                          </p>
+                          <p className="text-sm text-blue-600 font-medium">
+                            🛠 {job.job_type}
+                          </p>
+                        </div>
+
+                        <div className="mt-2 lg:mt-0">
+                          <Link
+                            to={`/jobs/details/${job.id}`}
+                            className="text-blue-600 underline font-medium"
+                          >
+                            Apply Job
+                          </Link>
+                        </div>
+                      </div>
                     </div>
 
                     <Link
