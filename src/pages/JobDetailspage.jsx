@@ -6,7 +6,6 @@ const JobDetails = () => {
   const { id } = useParams();
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
-  
 
   useEffect(() => {
     const fetchJob = async () => {
@@ -53,13 +52,13 @@ const JobDetails = () => {
             dangerouslySetInnerHTML={{ __html: job.description }}
           />
           <div className="flex justify-space-between w-full items-center align-middle ">
-            <div className="mt-6  w-full" >
+            <div className="mt-6  w-full">
               <Link to="/jobs" className="text-blue-500 hover:underline">
                 ← Back to Job Listings
               </Link>
             </div>
             <div className="mt-6 w-full text-right">
-              <Link to="/details"className="text-blue-500 hover:underline">
+              <Link to="/details" className="text-blue-500 hover:underline">
                 {" "}
                 Jobs Apply ➜
               </Link>
