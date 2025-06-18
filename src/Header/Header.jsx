@@ -1,16 +1,23 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Header = () => {
+  const navigate = useNavigate();
+   const handleLogOut = () => {
+        localStorage.removeItem('token');
+       alert("Log Out Successfully");
+       navigate("/")
+       
+     }
   return (
-    <header className="bg-gradient-to-r from-blue-800 to-blue-900 shadow-lg">
+    <header className="sticky top-0 z-50 bg-gradient-to-r from-blue-800 to-blue-900 shadow-lg">
       <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between font-sans">
         <h1 className="text-3xl font-extrabold text-white tracking-wide select-none">
           Job Portal
         </h1>
         <nav className="space-x-8">
           <Link
-            to="/"
+            to="/firstpage"
             className="text-white text-lg font-semibold hover:underline hover:underline-offset-4 transition duration-300"
           >
             Home
@@ -21,6 +28,12 @@ const Header = () => {
           >
             Job Listings
           </Link>
+          <button
+            className="bg-orange-500 hover:bg-gray-700 hover: text-white px-4 py-1"
+            onClick={handleLogOut}
+          >
+            Log Out
+          </button>
         </nav>
       </div>
     </header>

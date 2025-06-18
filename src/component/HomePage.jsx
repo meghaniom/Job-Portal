@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Header from '../Header/Header';
 
 const FirstPage = () => {
   return (
+    <>
+   <Header/>
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 px-4 py-12">
       <div className="bg-white shadow-2xl rounded-3xl p-8 sm:p-12 max-w-4xl w-full mx-4 text-center transform transition-all duration-500 hover:shadow-3xl">
         <div className="mb-10">
@@ -58,7 +61,7 @@ const FirstPage = () => {
             Browse Jobs
           </Link>
           <Link
-            to="/register"
+            to="/jobs"
             className="px-8 py-3.5 border-2 border-blue-600 text-blue-600 font-medium rounded-full hover:bg-blue-50 transition-all duration-300"
           >
             Create Account
@@ -70,6 +73,7 @@ const FirstPage = () => {
         </p>
       </div>
     </div>
+     </>
   );
 };
 
