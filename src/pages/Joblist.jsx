@@ -71,6 +71,8 @@ const JobListings = () => {
     return searchMatch && typeMatch && locationMatch;
   });
 
+  
+
   useEffect(() => {
     const handleScroll = () => {
       const bottom =

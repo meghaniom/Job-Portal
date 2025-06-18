@@ -12,6 +12,7 @@ import { AuthProvider } from "./context/Authcontext";
 import ProjectedRouter from "./Register/ProjectedRouter";
 import JobApply from "./pages/JobApply";
 import Applyjob from "./pages/Applyjob";
+import { PrimeReactProvider } from "primereact/api";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -19,96 +20,98 @@ const AppLayout = () => {
   const isLoggedIn = localStorage.getItem("token");
 
   return (
-    <AuthProvider>
-      {!isLoggedIn && isLoginPage}
+    <PrimeReactProvider>
+      <AuthProvider>
+        {!isLoggedIn && isLoginPage}
 
-      <Routes>
-        {/* Login route is always public */}
-        <Route
-          path="/"
-          element={isLoggedIn ? <Navigate to="/firstpage" /> : <Login />}
-        />
+        <Routes>
+          {/* Login route is always public */}
+          <Route
+            path="/"
+            element={isLoggedIn ? <Navigate to="/firstpage" /> : <Login />}
+          />
 
-        {/* Protected routes */}
-        <Route
-          path="/firstpage"
-          element={
-            isLoggedIn ? (
-              <ProjectedRouter>
-                <FirstPage />
-              </ProjectedRouter>
-            ) : (
-              <Navigate to="/noteFound" />
-            )
-          }
-        />
-        <Route
-          path="/jobs"
-          element={
-            isLoggedIn ? (
-              <ProjectedRouter>
-                <JobListings />
-              </ProjectedRouter>
-            ) : (
-              <Navigate to="/notefound" />
-            )
-          }
-        />
-        <Route
-          path="/jobs/:id"
-          element={
-            isLoggedIn ? (
-              <ProjectedRouter>
-                <JobDetailspage />
-              </ProjectedRouter>
-            ) : (
-              <Navigate to="/notefound" />
-            )
-          }
-        />
+          {/* Protected routes */}
+          <Route
+            path="/firstpage"
+            element={
+              isLoggedIn ? (
+                <ProjectedRouter>
+                  <FirstPage />
+                </ProjectedRouter>
+              ) : (
+                <Navigate to="/noteFound" />
+              )
+            }
+          />
+          <Route
+            path="/jobs"
+            element={
+              isLoggedIn ? (
+                <ProjectedRouter>
+                  <JobListings />
+                </ProjectedRouter>
+              ) : (
+                <Navigate to="/notefound" />
+              )
+            }
+          />
+          <Route
+            path="/jobs/:id"
+            element={
+              isLoggedIn ? (
+                <ProjectedRouter>
+                  <JobDetailspage />
+                </ProjectedRouter>
+              ) : (
+                <Navigate to="/notefound" />
+              )
+            }
+          />
 
-        <Route
-          path="/jobs/details/:id"
-          element={
-            isLoggedIn ? (
-              <ProjectedRouter>
-                <JobApply />
-              </ProjectedRouter>
-            ) : (
-              <Navigate to="/notefound" />
-            )
-          }
-        />
+          <Route
+            path="/jobs/details/:id"
+            element={
+              isLoggedIn ? (
+                <ProjectedRouter>
+                  <JobApply />
+                </ProjectedRouter>
+              ) : (
+                <Navigate to="/notefound" />
+              )
+            }
+          />
 
-        <Route
-          path="/saved"
-          element={
-            isLoggedIn ? (
-              <ProjectedRouter>
-                <SavedJob />
-              </ProjectedRouter>
-            ) : (
-              <Navigate to="/notefound" />
-            )
-          }
-        />
-        <Route
-          path="/apply/:id"
-          element={
-            isLoggedIn ? (
-              <ProjectedRouter>
-                <Applyjob />
-              </ProjectedRouter>
-            ) : (
-              <Navigate to="/notefound" />
-            )
-          }
-        />
+          <Route
+            path="/saved"
+            element={
+              isLoggedIn ? (
+                <ProjectedRouter>
+                  <SavedJob />
+                </ProjectedRouter>
+              ) : (
+                <Navigate to="/notefound" />
+              )
+            }
+          />
+          <Route
+            path="/apply"
+            element={
+              isLoggedIn ? (
+                <ProjectedRouter>
+                  <Applyjob />
+                </ProjectedRouter>
+              ) : (
+                <Navigate to="/notefound" />
+              )
+            }
+          />
 
-        {/* Fallback */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </AuthProvider>
+          {/* Fallback */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </AuthProvider>
+    </PrimeReactProvider>
   );
 };
 

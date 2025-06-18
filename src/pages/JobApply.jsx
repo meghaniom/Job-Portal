@@ -4,19 +4,17 @@ import { useNavigate, useParams } from "react-router-dom";
 const JobApply = () => {
   const [form, setForm] = useState({
     name: "",
-
     resume: null,
     coverLetter: "",
     captchaInput: "",
   });
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const navidate = useNavigate();
   const [captcha, setCaptcha] = useState("");
-  const[emailError, setEmailError] =  useState("");
+  const [emailError, setEmailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const { id } = useParams();
- 
+  const navigate = useNavigate();
 
   useEffect(() => {
     generateCaptcha();
@@ -41,31 +39,55 @@ const JobApply = () => {
     }
   };
 
+  const handlePhoneChange = (value) => {
+    const cleaned = value.replace(/\D/g, "");
+    if (cleaned.length > 10) return;
+    setPhone(cleaned);
+    setPhoneError(
+      cleaned.length === 10 ? "" : "Phone number must be exactly 10 digits."
+    );
+  };
+
+  const handleEmailChange = (value) => {
+    const trimmed = value.trim();
+    setEmail(trimmed);
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/;
+    setEmailError(
+      emailRegex.test(trimmed) ? "" : "Please enter a valid email address."
+    );
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/;
+    const phoneRegex = /^\d{10}$/;
+
+    if (
+      !form.name ||
+      !email ||
+      !phone ||
+      !form.resume ||
+      !form.coverLetter ||
+      !form.captchaInput
+    ) {
+      alert("Please fill in all the required fields.");
+      return;
+    }
+
+    if (!emailRegex.test(email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    if (!phoneRegex.test(phone)) {
+      alert("Phone number must be exactly 10 digits.");
+      return;
+    }
+
     if (form.captchaInput !== captcha) {
       alert("Captcha does not match. Please try again.");
       generateCaptcha();
-      return;
-    }
-    console.log("Form submitted:", form);
-    alert("Application submitted successfully!");
-    generateCaptcha();
-  };
-
-  const allFieldSelected =
-    form.name &&
-    email &&
-    phone &&
-    form.resume &&
-    form.coverLetter &&
-    form.captchaInput;
-
-  const handerSubmit = (e) => {
-    e.preventDefault();
-
-    if (!allFieldSelected) {
-      alert("Please fill in all the required fields.");
       return;
     }
 
@@ -82,39 +104,12 @@ const JobApply = () => {
       localStorage.getItem("jobApplications") || "{}"
     );
     existing[id] = submission;
-
     localStorage.setItem("jobApplications", JSON.stringify(existing));
+
     alert("Application submitted successfully!");
-
-    navidate(`/apply/${id}`);
     console.log("Application submitted:", submission);
+    navigate("/jobs");
   };
-
-  const handelPhonechange = (value) => {
-    const cleanedValue = value.replace(/\D/g, "");
-
-    if (cleanedValue.length > 10) return;
-    setPhone(cleanedValue);
-
-    if (cleanedValue.length !== 10) {
-     setPhoneError("Phone number must be  exactly 10 degits.");
-    } else {
-     setPhoneError(" ");
-    }
-  };
-
-const handelEmailChange = (value) => {
-  const trimmedValue = value.replace(/\s/g, "");
-  setEmail(trimmedValue); 
-
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/;
-
-  if (emailRegex.test(trimmedValue)) {
-  setEmailError("");
-  } else {
-    setEmailError("Please enter a valid email address."); 
-  }
-};
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-12">
@@ -123,7 +118,6 @@ const handelEmailChange = (value) => {
           Apply for This Job
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
-        
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -135,8 +129,6 @@ const handelEmailChange = (value) => {
                 value={form.name}
                 onChange={handleChange}
                 required
-               
-                title="Name should be at least 3 characters and contain only letters and spaces"
                 className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -148,13 +140,13 @@ const handelEmailChange = (value) => {
                 type="email"
                 name="email"
                 value={email}
-                onChange={(e) => handelEmailChange(e.target.value)}
+                onChange={(e) => handleEmailChange(e.target.value)}
                 required
-                title='"Please enter a valid email address'
-                
                 className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500"
               />
-              {emailError && <p className="text-red-500 text-sm mt-1"> {emailError}</p>}
+              {emailError && (
+                <p className="text-red-500 text-sm mt-1">{emailError}</p>
+              )}
             </div>
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -164,11 +156,13 @@ const handelEmailChange = (value) => {
                 type="tel"
                 name="phone"
                 value={phone}
-                onChange={(e) => handelPhonechange(e.target.value)}
+                onChange={(e) => handlePhoneChange(e.target.value)}
                 required
                 className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500"
               />
-              {phoneError && <p className="text-red-500 text-sm mt-1">{phoneError}</p>}
+              {phoneError && (
+                <p className="text-red-500 text-sm mt-1">{phoneError}</p>
+              )}
             </div>
           </div>
 
@@ -182,7 +176,6 @@ const handelEmailChange = (value) => {
               name="resume"
               onChange={handleChange}
               accept=".pdf,.doc,.docx"
-              download="resume.pdf"
               required
               className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700"
             />
@@ -191,7 +184,7 @@ const handelEmailChange = (value) => {
           {/* Cover Letter */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Cover Letter
+              Cover Letter  
             </label>
             <textarea
               name="coverLetter"
@@ -235,7 +228,6 @@ const handelEmailChange = (value) => {
           <div className="text-center">
             <button
               type="submit"
-              onClick={handerSubmit}
               className="bg-blue-600 text-white font-semibold px-6 py-3 rounded hover:bg-blue-700 transition duration-300"
             >
               Submit Application

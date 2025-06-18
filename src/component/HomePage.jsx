@@ -1,8 +1,39 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Header from '../Header/Header';
+import UseSessionTimeout from '../hooks/UseSessionTimeout';
 
 const FirstPage = () => {
+ UseSessionTimeout();
+
+  // useEffect(()=> {
+  //     const token =  localStorage.getItem("token");
+  //     const loginTime = localStorage.getItem("loginTime");
+
+  //     if (token && loginTime) {
+  //       const currentTime =  new Date().getTime();
+  //       const timeExpired =   currentTime - parseInt(loginTime);
+
+  //       if (timeExpired > 30 * 60 * 1000) {
+  //         localStorage.removeItem("token");
+  //         localStorage.removeItem("loginTime");
+  //         alert("session expired please Login  Again.");
+  //         navigate("/");
+  //       }
+  //       else {
+  //         navigate("/firstpage");
+  //       }
+  //     }
+
+  // }, [])
+
+  //  setTimeout(()=> {
+  //   localStorage.removeItem("token");
+  //   localStorage.removeItem("loginTime");
+  //   alert("session expired please Login  again.");
+  //   navigate("/");
+
+  //  }, 30 * 60 * 1000)
   return (
     <>
    <Header/>

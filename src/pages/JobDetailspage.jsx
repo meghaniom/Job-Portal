@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import Header from "../Header/Header";
 
 const JobDetails = () => {
   const { id } = useParams();
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchJob = async () => {
@@ -15,20 +16,29 @@ const JobDetails = () => {
         );
         const data = await response.json();
         const foundJob = data.jobs.find((job) => job.id.toString() === id);
-        setJob(foundJob);
+        if (foundJob) {
+          setJob(foundJob);
+        } else {
+          alert("Job are not Found");
+          navigate("/jobs");
+        }
       } catch (error) {
         console.error("Error fetching job:", error);
       } finally {
         setLoading(false);
       }
     };
-
     fetchJob();
-  }, [id]);
+  }, [id, navigate]);
 
   if (loading)
     return <p className="p-6 text-gray-600">Loading job details...</p>;
   if (!job) return <p className="p-6 text-red-500">Job not found.</p>;
+
+  const cleanDescription = job.description.replace(
+    /<img[^>]*blank\.gif[^>]*>/gi,
+    ""
+  );
 
   return (
     <>
@@ -49,8 +59,16 @@ const JobDetails = () => {
           </h2>
           <div
             className="prose max-w-full text-gray-700"
-            dangerouslySetInnerHTML={{ __html: job.description }}
+            dangerouslySetInnerHTML={{ __html: cleanDescription }}
           />
+          <a
+            href={job.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block mt-6 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
+          >
+            Apply on Website
+          </a>
           <div className="flex justify-space-between w-full items-center align-middle ">
             <div className="mt-6  w-full">
               <Link to="/jobs" className="text-blue-500 hover:underline">
@@ -58,7 +76,10 @@ const JobDetails = () => {
               </Link>
             </div>
             <div className="mt-6 w-full text-right">
-              <Link to="/details" className="text-blue-500 hover:underline">
+              <Link
+                to={`/jobs/details/${job.id}`}
+                className="text-blue-500 hover:underline"
+              >
                 {" "}
                 Jobs Apply ➜
               </Link>

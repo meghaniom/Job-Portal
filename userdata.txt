@@ -1,2 +1,14 @@
 email = "john@mail.com",
 password = "changeme"   
+
+{/* <div className="card">
+            <Editor
+              value={text}
+              onTextChange={(e) => setText(e.htmlValue)}
+              style={{ height: "320px" }}
+            />
+          </div> */}
+
+          {/* Cover Letter */}
+
+          const [text, setText] = useState("");
